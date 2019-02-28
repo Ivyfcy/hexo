@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang=zh-CN>
+  <head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="description" content="前端">
+  <meta name="keywords" content>
+  
+    <link rel="icon" href>
+  
+    
+  <title>Vue生命周期 | Miss.冯</title>
+  <link rel="stylesheet" href="/hexo/style.css">
+  <link rel="stylesheet" href="/hexo/lib/jquery.fancybox.min.css">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+  <header>
+  <div class="header-container">
+    <a class="logo" href="/hexo/">
+      <span>Miss.冯</span>
+    </a>
+    <ul class="right-header">
+      
+        <li class="nav-item">
+          
+            <a href="/hexo/" class="item-link">首页</a>
+          
+        </li>
+      
+        <li class="nav-item">
+          
+            <a href="/hexo/about" class="item-link">关于</a>
+          
+        </li>
+      
+        <li class="nav-item">
+          
+            <a href="/hexo/archives" class="item-link">归档</a>
+          
+        </li>
+      
+        <li class="nav-item">
+          
+            <a href="/hexo/tags" class="item-link">标签</a>
+          
+        </li>
+      
+    </ul>
+  </div>
+</header>
+
+  <main id="post">
+  <div class="content">
+    <article>
+        <section class="content markdown-body">
+          <h1>Vue生命周期</h1>
+          <div class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> <time>2019年01月28日</time>
+            
+              | <i class="fa fa-folder-open-o" aria-hidden="true"></i> 
+  <div class="article-category">
+    <a class="article-category-link" href="/hexo/categories/Vue/">Vue</a>
+  </div>
+
+
+
+            
+            
+              | 
+                  <i class="fa fa-tags" aria-hidden="true"></i>
+                
+               
+  <a href="/hexo/tags/#生命周期" class="tag">生命周期</a>
+
+  <a href="/hexo/tags/#watch" class="tag">watch</a>
+
+  <a href="/hexo/tags/#computed" class="tag">computed</a>
+
+
+            
+          </div>
+          <h1 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h1><ul>
+<li>Vue 实例从开始创建，初始化数据，编译模版，挂载Dom -&gt; 渲染，更新-&gt;渲染，卸载等一系列过程，各个阶段有相对应的事件钩子</li>
+<li>生命周期钩子自动绑定到实例上，因此通过this.操作访问到数据和方法<blockquote>
+<p>注意：不能使用箭头函数，因为箭头函数绑定外层的this会一直往上找</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="常用的钩子函数"><a href="#常用的钩子函数" class="headerlink" title="常用的钩子函数"></a>常用的钩子函数</h2><ul>
+<li><p><code>beforeCreate</code> 实例初始化之后，不能访问到data，computed，watch，methods上的方法和数据——–常用于初始化非响应式变量</p>
+</li>
+<li><p><code>created</code> 实例创建完成，可以拿到data数据了，但是dom还没挂载，不能访问到$el属性，$ref属性内容为空数组，会判断有无el，如果没有el 则停止后面的模版挂载（也就不执行后面的钩子函数，但是在没有el属性的情况下，有vm.$mount方法就可以继续执行下去）———–常用于简单的ajax请求，页面的初始化</p>
+</li>
+<li><p><code>beforeMount</code> 在挂载开始之前被调用，beforeMount 之前，会找到对应template，并编译成render函数</p>
+</li>
+</ul>
+<ul>
+<li><p><code>mounted</code> 实例挂载到dom上，$ref属性可以访问，mounted 中 el被创建dom已经更新，vue实例对象有template参数选项，则将其作为模版编译成render函数，编译优先级render函数选项&gt;ytemplate选项—————常用于获取信息和操作，ajax请求</p>
+<blockquote>
+<p>注意：mounted不会承诺所有的子组件也都一起被挂载，如果你希望等到整个视图都渲染完毕，可以用vm.$nextTick 替换mounted</p>
+</blockquote>
+</li>
+<li><p><code>beforeupdate</code> 响应式数据更新—-</p>
+</li>
+<li><code>updated</code> 组件dom 已经更新——避免操作数据，可能陷入死循环</li>
+<li><code>beforeDestory</code></li>
+<li><code>destoryed</code></li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>初始化组件时，仅执行了beforeCreate、Create、beforeMount、mounted 四个钩子函数</li>
+<li>当改变data中定义的变量时，会执行 beforeUpdate、updated</li>
+<li>初始化和销毁时的生命钩子函数均只会执行一次，beforeUpdate、updated 可多次执行</li>
+<li>new Vue（）</li>
+<li>暴露属性和方法——就是vue实例自带的一些属性和方法，官网例子中带$的属性和方法就是vue实例自带的，可以和用户定义的区分开来</li>
+</ul>
+<h1 id="计算属性-computed"><a href="#计算属性-computed" class="headerlink" title="计算属性 computed"></a>计算属性 computed</h1><ul>
+<li>计算属性是基于它们的依赖进行缓存的，只有它们的依赖发生改变才会重新求值</li>
+<li>computed 中的属性不能与data中的属性同名，否则会报错</li>
+</ul>
+<h1 id="监视数据变化-watch"><a href="#监视数据变化-watch" class="headerlink" title="监视数据变化  watch"></a>监视数据变化  watch</h1><ul>
+<li>watch 是一个对象，键是需要观察的表达式，值是对应回调函数</li>
+<li>deep：true 表示是否监听对象内部属性值的变化</li>
+<li>作用：当表达式的值发生变化后，会调用对应的回调函数完成响应的监视操作</li>
+</ul>
+
+        </section>
+    </article>
+    
+    
+        <!-- livere 评论框 start -->
+        <div class="comment">
+            <div id="lv-container" data-id="city" data-uid="MTAyMC80Mjg2Ny8xOTQxNA=="></div>
+        </div>
+        <!-- livere 评论框 end -->
+        
+  </div>
+  <aside>
+    
+    <div class="toc-container">
+        <h1>目录</h1>
+        <div class="content">
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#生命周期"><span class="toc-number">1.</span> <span class="toc-text">生命周期</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#常用的钩子函数"><span class="toc-number">1.1.</span> <span class="toc-text">常用的钩子函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">1.2.</span> <span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#计算属性-computed"><span class="toc-number">2.</span> <span class="toc-text">计算属性 computed</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#监视数据变化-watch"><span class="toc-number">3.</span> <span class="toc-text">监视数据变化  watch</span></a></li></ol>
+        </div>
+    </div>
+    
+  </aside>
+</main>
+
+
+<script type="text/javascript">
+  (function(d, s) {
+      var j, e = d.getElementsByTagName(s)[0];
+
+      if (typeof LivereTower === 'function') { return; }
+
+      j = d.createElement(s);
+      j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+      j.async = true;
+
+      e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+</script>
+
+
+  <footer>
+  <div class="copyright">
+    <div>
+      &copy; 2019 | Powered by <a href="https://hexo.io" target="_blank">Hexo</a>&nbsp
+    </div>
+    <div>
+      Theme by <a href="https://github.com/lewis-geek/hexo-theme-Aath" target="_blank">Aath</a>
+    </div>
+  </div>
+</footer>
+
+
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="/hexo/lib/in-view.min.js"></script>
+<script src="/hexo/lib/lodash.min.js"></script>
+<script>
+  var isDown = true
+  var oldY = 0
+  inView.offset(50)
+
+  document.body.addEventListener('touchstart', function(){});
+  
+  window.addEventListener('scroll', _.throttle(e => {
+    var currentY = window.scrollY
+    if((oldY - currentY) < 0) {
+      isDown = true
+    } else {
+      isDown = false
+    }
+    oldY = currentY
+  }, 250))
+
+  $("article img").each(function() {
+      var strA = "<a data-fancybox='gallery' href='" + this.src + "'></a>";
+      $(this).wrapAll(strA);
+  });
+
+  $('.toc-link').each(function() {
+      var href = $(this).attr("href");
+      
+      inView(href).on('exit', () => {
+        if (isDown) {
+          handleActive(href)
+        }
+      })
+
+      inView(href).on('enter', () => {
+        if (!isDown) {
+          handleActive(href)
+        }
+      })
+
+      this.onclick = function(e) {
+        var pos = $(href).offset().top - 10;
+        $("html,body").animate({scrollTop: pos}, 300);
+        setTimeout(() => {
+          handleActive(href)
+        }, 350)
+        return false
+      }
+  })
+
+  function handleActive(href) {
+    document.querySelectorAll('.toc-link').forEach(elm => {
+      elm.classList.remove('active')
+    })
+    document.querySelector(".toc [href='"+ href +"']").classList.add('active')
+  }
+</script>
+<script src="/hexo/lib/jquery.fancybox.min.js"></script>
+
+
+</body>
+</html>
