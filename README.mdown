@@ -1,5 +1,5 @@
 
-# 安装命令
+# 博客生成只需以下命令
 - npm install -g hexo-cli
     -  hexo-cli会安装hexo同时安装一些命令，就可以通过命令来操控hexo
 - npm init <folder> ###
