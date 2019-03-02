@@ -1,0 +1,12 @@
+
+# 安装命令
+- npm install -g hexo-cli
+    -  hexo-cli会安装hexo同时安装一些命令，就可以通过命令来操控hexo
+- npm init <folder> ###
+    - 在指定文件夹中新建所需的文件（各种需要的包和文件）---为什么需要git，因为有一个github hexo-starter 把hexo所有的包文件都放在其中）
+- cd <folder>
+- npm install
+- hexo generate 生成静态文件网页（hexo g）
+- npm server 启动服务器
+    - 简写hexo s 访问网址为：https：//localhost：4000/
+    - 如果想更改端口，可执行时使用-p 选项指定其他端口 hexo server -p 5000
